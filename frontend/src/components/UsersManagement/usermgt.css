@@ -1,0 +1,74 @@
+/* src/pages/admin/users-management.css */
+
+.users-management-container {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #fafafa;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.users-management-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.users-list {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+}
+
+.user-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 12px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.username {
+  font-weight: bold;
+  color: #333;
+}
+
+.user-email {
+  font-size: 14px;
+  color: #777;
+}
+
+.delete-button {
+  background-color: #e63946;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #d62828;
+}
+
+.search-input {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 20px auto;
+  display: block;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+}

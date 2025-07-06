@@ -1,0 +1,179 @@
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+import Navbar from "../Navbar";
+import { withRouter } from "../../utils/withRouter";
+import './profile.css';
+
+class Profile extends Component {
+  state = {
+    profile: null,
+    posts: [],
+    loading: true,
+    error: null,
+    followers: 0,
+    following: 0,
+    createForm: {
+      displayName: "",
+      handle: "",
+      avatarUrl: "",
+      bio: ""
+    },
+    creating: false
+  };
+
+  componentDidMount() {
+    this.loadData();
+  }
+
+  loadData = async () => {
+    const { userId } = this.props.params;
+    try {
+      // Fetch profile
+      const profRes = await fetch(`http://localhost:8080/api/profiles/${userId}`);
+      if (profRes.ok) {
+        const profile = await profRes.json();
+
+        const postsRes = await fetch("http://localhost:8080/api/posts");
+        const allPosts = await postsRes.json();
+        const posts = allPosts.filter((p) => p.author_id === parseInt(userId, 10));
+
+        const folRes = await fetch(`http://localhost:8080/api/follows/count/followers/${userId}`);
+        const { followers } = await folRes.json();
+
+        const follRes = await fetch(`http://localhost:8080/api/follows/count/following/${userId}`);
+        const { following } = await follRes.json();
+
+        this.setState({ profile, posts, followers, following, loading: false });
+      } else {
+        // No profile found – show create option
+        this.setState({ profile: null, loading: false });
+      }
+    } catch (err) {
+      this.setState({ error: err.message, loading: false });
+    }
+  };
+
+  handleChange = (e) => {
+    this.setState({
+      createForm: {
+        ...this.state.createForm,
+        [e.target.name]: e.target.value
+      }
+    });
+  };
+
+  handleCreateProfile = async () => {
+    const { userId } = this.props.params;
+    const { displayName, handle, avatarUrl, bio } = this.state.createForm;
+
+    try {
+      const res = await fetch("http://localhost:8080/api/profiles/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: parseInt(userId, 10),
+          displayName,
+          handle,
+          avatarUrl,
+          bio
+        })
+      });
+
+      if (res.ok) {
+        alert("Profile created!");
+        this.loadData(); // Reload to fetch profile
+      } else {
+        const data = await res.json();
+        alert(data.error || "Failed to create profile");
+      }
+    } catch (err) {
+      alert("Server error: " + err.message);
+    }
+  };
+
+  renderCreateForm = () => {
+    const { displayName, handle, avatarUrl, bio } = this.state.createForm;
+
+    return (
+      <div className="create-profile-form">
+        <h2>Create Your Profile</h2>
+        <input type="text" name="displayName" placeholder="Display Name" value={displayName} onChange={this.handleChange} required />
+        <input type="text" name="handle" placeholder="Handle" value={handle} onChange={this.handleChange} required />
+        <input type="text" name="avatarUrl" placeholder="Avatar URL (optional)" value={avatarUrl} onChange={this.handleChange} />
+        <textarea name="bio" placeholder="Bio" value={bio} onChange={this.handleChange} rows={4}></textarea>
+        <button onClick={this.handleCreateProfile}>Create Profile</button>
+      </div>
+    );
+  };
+
+  render() {
+    const { profile, posts, loading, error, followers, following } = this.state;
+    console.log(this.state);
+    if (loading) return <><Navbar /><p className="profile-loading">Loading profile…</p></>;
+    if (error) return <><Navbar /><p className="profile-error">{error}</p></>;
+
+    if (!profile) {
+      return (
+        <>
+          <Navbar />
+          <div className="profile-container">
+            <p>No profile found for this user.</p>
+            {this.renderCreateForm()}
+          </div>
+        </>
+      );
+    }
+
+    return (
+      <>
+        <Navbar />
+        <div className="profile-container">
+          <div className="profile-sidebar">
+            <img
+              src={profile.avatarUrl || "https://via.placeholder.com/150"}
+              alt={profile.displayName}
+              className="profile-image"
+            />
+            <h3 className="profile-name">{profile.displayName}</h3>
+            <p className="profile-username">@{profile.handle}</p>
+
+            <ul className="profile-menu">
+              <li className="active">Overview</li>
+              <li><Link to="#">Posts</Link></li>
+              <li><Link to="#">Edit Profile</Link></li>
+              <li><Link to="#">Delete Profile</Link></li>
+            </ul>
+          </div>
+
+          <div className="profile-main">
+            <h2 className="overview-heading">Overview</h2>
+            <div className="stats-box">
+              <div className="stat"><strong>{posts.length}</strong><span>Posts</span></div>
+              <div className="stat"><strong>{followers}</strong><span>Followers</span></div>
+              <div className="stat"><strong>{following}</strong><span>Following</span></div>
+            </div>
+
+            <h3>About</h3>
+            <p className="profile-bio">{profile.bio}</p>
+
+            <h3>Posts</h3>
+            {posts.map((post) => (
+              <div className="profile-post" key={post.id}>
+                <div className="profile-post-info">
+                  {post.featured && <span className="featured-label">Featured</span>}
+                  <h4>{post.title}</h4>
+                  <p>{post.content.slice(0, 150)}{post.content.length > 150 ? "…" : ""}</p>
+                </div>
+                {post.imageUrl && (
+                  <img src={post.imageUrl} alt={post.title} className="profile-post-image" />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </>
+    );
+  }
+}
+
+export default withRouter(Profile);

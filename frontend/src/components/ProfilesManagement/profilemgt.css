@@ -1,0 +1,63 @@
+/* src/pages/admin/profiles-management.css */
+
+.profiles-management-container {
+  padding: 2rem;
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: #fefefe;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.profiles-management-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #333;
+  text-align: center;
+}
+
+.profiles-list {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+}
+
+.profile-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 12px;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+.profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.display-name {
+  font-weight: bold;
+  color: #222;
+}
+
+.handle {
+  font-size: 14px;
+  color: #888;
+}
+
+.delete-button {
+  background-color: #e63946;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  background-color: #d62828;
+}

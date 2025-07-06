@@ -1,0 +1,270 @@
+// src/pages/Home.js
+import { Component } from "react";
+import { Link } from "react-router-dom";
+import Navbar from "../Navbar";
+import "./home.css";
+
+class Home extends Component {
+  state = {
+    featuredPosts: [], // We'll update this dynamically if needed
+    latestPosts: [],
+  };
+
+  componentDidMount() {
+    this.getData();
+  }
+
+  getData = async () => {
+  try {
+    const response = await fetch("http://localhost:8080/api/posts");
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    console.log(data);
+    this.setState({
+      latestPosts: data,
+      featuredPosts: data.slice(0, 3),
+    });
+  } catch (error) {
+    console.error("Failed to fetch posts:", error);
+  }
+};
+
+  render() {
+    const { featuredPosts, latestPosts } = this.state;
+
+    return (
+        <>
+        <Navbar/>
+      <div className="home-container">
+        <div className="home-search-bar">
+          <input className="home-search-input" type="text" placeholder="Search posts" />
+        </div>
+
+        <div className="home-filters">
+          <select><option>Category</option></select>
+          <select><option>Tags</option></select>
+          <select><option>Sort</option></select>
+        </div>
+
+        <h2 className="home-section-title">Featured Posts</h2>
+        <div className="home-featured-posts">
+          {featuredPosts.map((post, index) => (
+            <div className="featured-card" key={index}>
+              <img src={post.image_url} alt="cover" className="featured-image" />
+              <h3>{post.title}</h3>
+              <p>
+                  {post.content.length > 100
+                    ? post.content.substring(0, 100) + "..."
+                    : post.content}
+                </p>
+            </div>
+          ))}
+        </div>
+
+        <h2 className="home-section-title">Latest Posts</h2>
+        <div className="home-latest-posts">
+          {latestPosts.map((post, index) => (
+            <div className="latest-post" key={index}>
+              <div className="latest-post-text">
+                <span className="post-category">{post.category}</span>
+                <h3>{post.title}</h3>
+                <p>
+                  {post.content.length > 200
+                    ? post.content.substring(0, 200) + "..."
+                    : post.content}
+                </p>
+                <button className="read-button">
+                    <Link to={`/blogpage/${post.id}`}>Read More</Link>
+                </button>
+              </div>
+              <img src={post.image_url} alt="cover" className="latest-post-img" />
+            </div>
+          ))}
+        </div>
+      </div></>
+    );
+  }
+}
+
+export default Home;
+
+import { Component } from "react";
+import { Link } from "react-router-dom";
+import Navbar from "../Navbar";
+import "./home.css";
+
+class Home extends Component {
+  state = {
+    featuredPosts: [],
+    latestPosts: [],
+    searchTerm: "",
+    selectedCategoryId: "all",
+    selectedTagId: "all",
+    categories: [],
+    tags: [],
+  };
+
+  componentDidMount() {
+    this.getPosts();
+    this.getCategories();
+    this.getTags();
+  }
+
+  getPosts = async () => {
+    try {
+      const response = await fetch("/api/posts");
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+
+      const sortedPosts = data.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      );
+
+      this.setState({
+        latestPosts: sortedPosts,
+        featuredPosts: sortedPosts.slice(0, 3),
+      });
+    } catch (error) {
+      console.error("Failed to fetch posts:", error);
+    }
+  };
+
+  getCategories = async () => {
+    try {
+      const response = await fetch("/api/categories");
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+
+      const categories = [{ id: "all", name: "All" }, ...data];
+      this.setState({ categories });
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+    }
+  };
+
+  getTags = async () => {
+    try {
+      const response = await fetch("http://localhost:8080/api/tags");
+      if (!response.ok) throw new Error("Failed to fetch tags");
+      const data = await response.json();
+
+      const tags = [{ id: "all", name: "All" }, ...data];
+      this.setState({ tags });
+    } catch (error) {
+      console.error("Failed to fetch tags:", error);
+    }
+  };
+
+  handleSearchChange = (event) => {
+    this.setState({ searchTerm: event.target.value });
+  };
+
+  handleCategoryChange = (event) => {
+    this.setState({ selectedCategoryId: event.target.value });
+  };
+
+  handleTagChange = (event) => {
+    this.setState({ selectedTagId: event.target.value });
+  };
+
+  render() {
+    const {
+      featuredPosts,
+      latestPosts,
+      searchTerm,
+      selectedCategoryId,
+      selectedTagId,
+      categories,
+      tags,
+    } = this.state;
+
+    const filteredPosts = latestPosts.filter((post) => {
+      const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesCategory =
+        selectedCategoryId === "all" || post.category_id === parseInt(selectedCategoryId);
+
+      const matchesTag =
+        selectedTagId === "all" ||
+        (post.tags && post.tags.some((tag) => tag.id === parseInt(selectedTagId)));
+
+      return matchesSearch && matchesCategory && matchesTag;
+    });
+
+    return (
+      <>
+        <Navbar />
+        <div className="home-container">
+          <div className="home-search-bar">
+            <input
+              className="home-search-input"
+              type="text"
+              placeholder="Search posts"
+              value={searchTerm}
+              onChange={this.handleSearchChange}
+            />
+          </div>
+
+          <div className="home-filters">
+            <select value={selectedCategoryId} onChange={this.handleCategoryChange}>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+
+            <select value={selectedTagId} onChange={this.handleTagChange}>
+              {tags.map((tag) => (
+                <option key={tag.id} value={tag.id}>
+                  {tag.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <h2 className="home-section-title">Featured Posts</h2>
+          <div className="home-featured-posts">
+            {featuredPosts.map((post, index) => (
+              <div className="featured-card" key={index}>
+                <img src={post.image_url} alt="cover" className="featured-image" />
+                <h3>{post.title}</h3>
+                <p>
+                  {post.content.length > 100
+                    ? post.content.substring(0, 100) + "..."
+                    : post.content}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <h2 className="home-section-title">Latest Posts</h2>
+          <div className="home-latest-posts">
+            {filteredPosts.map((post, index) => (
+              <div className="latest-post" key={index}>
+                <div className="latest-post-text">
+                  <span className="post-category">{post.category}</span>
+                  <h3>{post.title}</h3>
+                  <p>
+                    {post.content.length > 200
+                      ? post.content.substring(0, 200) + "..."
+                      : post.content}
+                  </p>
+                  <button className="read-button">
+                    <Link to={`/blogpage/${post.id}`}>Read More</Link>
+                  </button>
+                </div>
+                <img src={post.image_url} alt="cover" className="latest-post-img" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </>
+    );
+  }
+}
+
+export default Home;
