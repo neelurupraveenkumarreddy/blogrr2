@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class JwtUtil {
 
-    private static final String SECRET_KEY = "L/ltMEi8ZMYpEzGpOa0bES1H6SHR9tw3xDfA7g7Mtw9dyBp3bCEU3tUfpEDlYlUABKX6TY5J9Oa93GH9sbM6jw==";
+    private static final String SECRET_KEY = "";
     private static final long EXPIRATION_TIME = 86400000; // 1 day
 
     private static Key getSigningKey() {
