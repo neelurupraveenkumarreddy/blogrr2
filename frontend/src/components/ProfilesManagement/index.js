@@ -8,6 +8,7 @@ class ProfilesManagement extends Component {
   state = {
     profiles: [],
     searchTerm: "",
+    Jtoken:"",
   };
 
   componentDidMount() {
@@ -15,6 +16,8 @@ class ProfilesManagement extends Component {
   }
 
   fetchProfiles = async () => {
+    const Jtoken=Cookies.get("jwt_token")
+    this.setState({Jtoken:Jtoken});
     try {
       const response = await fetch("/api/profiles");
       const data = await response.json();
@@ -26,11 +29,12 @@ class ProfilesManagement extends Component {
   };
 
   deleteProfile = async (userId) => {
+    const {Jtoken}=this.state
     if (!window.confirm("Are you sure you want to delete this profile?")) return;
     try {
-      const response = await fetch(`/api/profiles/${userId}`, {
+      const response = await fetch(`/api/profiles/secure/${userId}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${Cookies.get("jwt_token")}` },
+        headers: { Authorization: `Bearer ${Jtoken}` },
       });
       if (response.ok) {
         alert("Profile deleted");

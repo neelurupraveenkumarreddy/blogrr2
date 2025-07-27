@@ -1,8 +1,9 @@
 .home-container {
   padding: 30px;
-  max-width: 1000px;
+  max-width: 100%;
   margin: 0 auto;
   font-family: sans-serif;
+  background-color:#edeae8;
 }
 
 .home-search-bar {
@@ -24,20 +25,23 @@
   display: flex;
   gap: 10px;
   margin: 20px 0;
+  color:#edeae8;
 }
 
 .home-filters select {
   padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  background-color: white;
+  background-color: #a11008;
   font-size: 14px;
+  color:#edeae8;
 }
 
 .home-section-title {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 30px;
+  font-weight: 800;
   margin: 30px 0 15px;
+  color:#020203;
 }
 
 .home-featured-posts {
@@ -47,7 +51,7 @@
 }
 
 .featured-card {
-  background: #f9f9f9;
+  background-color:white;
   padding: 10px;
   width: 30%;
   border-radius: 8px;
@@ -62,6 +66,12 @@
   margin-bottom: 10px;
 }
 
+.homePostTitle{
+  color: #020203;
+}
+.homePostContent{
+  color:#020203;
+}
 .home-latest-posts {
   display: flex;
   flex-direction: column;
@@ -73,8 +83,9 @@
   display: flex;
   justify-content: space-between;
   gap: 20px;
+  border-radius: 5px;
   align-items: center;
-  background:#f9f9f9;
+  background-color:white;
   box-shadow: 0 0 10px #ddd;
   padding:10px;
 }
@@ -98,10 +109,11 @@
 .read-button {
   margin-top: 10px;
   padding: 8px 16px;
-  background: #e5e7eb;
+  background: #f69200;
   border: none;
   border-radius: 6px;
   cursor: pointer;
+  color:black;
 }
 
 /* Tag badges under each post */
@@ -112,8 +124,8 @@
   gap: 6px;
 }
 .post-tag {
-  background-color: #f0f2f5;
-  color: #333;
+  background-color: #a11008;
+  color: white;
   font-size: 12px;
   padding: 4px 8px;
   border-radius: 12px;
@@ -163,7 +175,7 @@
   }
 
   .featured-card {
-    width: 100%;
+    width: 90%;
   }
 
   .featured-image {

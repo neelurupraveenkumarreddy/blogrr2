@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Cookies from "js-cookie";
 import "./admin.css";
 import AdminNavbar from "../AdminNavbar";
 
@@ -12,6 +13,7 @@ class AdminCatTag extends Component {
     categorySearch: "",
     tagSearch: "",
     postCounts: {},
+    Jtoken:"",
   };
 
   componentDidMount() {
@@ -21,9 +23,10 @@ class AdminCatTag extends Component {
   }
 
   fetchCategories = async () => {
+    const Jtoken=Cookies.get("jwt_token");
     const res = await fetch("http://localhost:8080/api/categories");
     const data = await res.json();
-    this.setState({ categories: data });
+    this.setState({ categories: data ,Jtoken:Jtoken});
   };
 
   fetchTags = async () => {
@@ -46,12 +49,12 @@ class AdminCatTag extends Component {
   };
 
   handleCategoryAdd = async () => {
-    const { newCategory } = this.state;
+    const { newCategory,Jtoken } = this.state;
     if (!newCategory.trim()) return;
 
-    await fetch("http://localhost:8080/api/categories/create", {
+    await fetch("http://localhost:8080/api/categories/secure/create", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" ,Authorization: `Bearer ${Jtoken}`,},
       body: JSON.stringify({ name: newCategory }),
     });
 
@@ -74,9 +77,11 @@ class AdminCatTag extends Component {
   };
 
   handleDeleteCategory = async (id) => {
+    const {Jtoken}=this.state
     if (!window.confirm("Are you sure you want to delete this category?")) return;
-    await fetch(`http://localhost:8080/api/categories/${id}`, {
+    await fetch(`http://localhost:8080/api/categories/secure/${id}`, {
       method: "DELETE",
+      headers: { "Content-Type": "application/json" ,Authorization: `Bearer ${Jtoken}`,},
     });
     this.fetchCategories();
   };

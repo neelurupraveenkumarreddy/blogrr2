@@ -17,7 +17,8 @@ public class WebConfig {
                         .allowedOrigins("http://localhost:3000")  // Your React dev URL
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
-                        .allowCredentials(true);  // Optional: if using cookies or auth
+                        .exposedHeaders("Authorization")                        
+                        .allowCredentials(false);  // Optional: if using cookies or auth
             }
         };
     }

@@ -8,6 +8,7 @@ class PostsManagement extends Component {
   state = {
     posts: [],
     searchTerm: "",
+    Jtoken:"",
   };
 
   componentDidMount() {
@@ -15,6 +16,8 @@ class PostsManagement extends Component {
   }
 
   fetchPosts = async () => {
+    const Jtoken=Cookies.get("jwt_token")
+    this.setState({Jtoken:Jtoken});
     try {
       const res = await fetch("/api/posts");
       const data = await res.json();
@@ -26,12 +29,13 @@ class PostsManagement extends Component {
   };
 
   deletePost = async (id) => {
+    const {Jtoken}=this.state
     if (!window.confirm("Are you sure you want to delete this post?")) return;
     try {
-      const res = await fetch(`/api/posts/${id}`, {
+      const res = await fetch(`/api/posts/secure/${id}`, {
         method: "DELETE",
         headers: {
-          Authorization: `Bearer ${Cookies.get("jwt_token")}`,
+          Authorization: `Bearer ${Jtoken}`,
         },
       });
       if (res.ok) {
@@ -54,7 +58,7 @@ class PostsManagement extends Component {
         .toLowerCase()
         .includes(searchTerm.toLowerCase())
     );
-
+    console.log(filteredPosts);
     return (
         <><AdminNavbar/>
         <div className="posts-management-container">

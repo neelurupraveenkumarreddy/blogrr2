@@ -150,8 +150,8 @@ class Home extends Component {
                   alt="cover"
                   className="featured-image"
                 />
-                <h3>{post.title}</h3>
-                <p>
+                <h3 className="homePostTitle">{post.title}</h3>
+                <p className="homePostContent">
                   {post.content.length > 100
                     ? post.content.substring(0, 100) + "..."
                     : post.content}
@@ -167,8 +167,8 @@ class Home extends Component {
               <div className="latest-post" key={post.id}>
                 <div className="latest-post-text">
                   <span className="post-category">{post.category}</span>
-                  <h3>{post.title}</h3>
-                  <p>
+                  <h3 className="homePostTitle">{post.title}</h3>
+                  <p className="homePostContent">
                     {post.content.length > 200
                       ? post.content.substring(0, 200) + "..."
                       : post.content}

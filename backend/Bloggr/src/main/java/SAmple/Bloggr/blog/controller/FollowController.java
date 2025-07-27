@@ -13,13 +13,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/follows")
+@RequestMapping("/api")
 public class FollowController {
     @Autowired private FollowRepository repo;
     @Autowired private ProfileRepository profileRepo;
 
     // Follow a user
-    @PostMapping("/follow")
+    @PostMapping("/secure/follows/follow")
     public ResponseEntity<Map<String, Object>> follow(
         @RequestParam int followerId,
         @RequestParam int followeeId
@@ -38,7 +38,7 @@ public class FollowController {
     }
 
     // Unfollow a user
-    @PostMapping("/unfollow")
+    @PostMapping("/secure/follows/unfollow")
     public ResponseEntity<Map<String, Object>> unfollow(
         @RequestParam int followerId,
         @RequestParam int followeeId
@@ -57,33 +57,33 @@ public class FollowController {
     }
 
     // Count followers
-    @GetMapping("/count/followers/{userId}")
+    @GetMapping("/follows/count/followers/{userId}")
     public ResponseEntity<Map<String, Integer>> countFollowers(@PathVariable int userId) {
         int count = repo.countFollowers(userId);
         return ResponseEntity.ok(Map.of("followers", count));
     }
 
     // Count following
-    @GetMapping("/count/following/{userId}")
+    @GetMapping("/follows/count/following/{userId}")
     public ResponseEntity<Map<String, Integer>> countFollowing(@PathVariable int userId) {
         int count = repo.countFollowing(userId);
         return ResponseEntity.ok(Map.of("following", count));
     }
 
     // List raw Follow records of followers
-    @GetMapping("/list/followers/{userId}")
+    @GetMapping("/follows/list/followers/{userId}")
     public ResponseEntity<List<Follow>> listFollowers(@PathVariable int userId) {
         return ResponseEntity.ok(repo.findFollowers(userId));
     }
 
     // List raw Follow records of following
-    @GetMapping("/list/following/{userId}")
+    @GetMapping("/follows/list/following/{userId}")
     public ResponseEntity<List<Follow>> listFollowing(@PathVariable int userId) {
         return ResponseEntity.ok(repo.findFollowing(userId));
     }
 
     // List Profile details of followers
-    @GetMapping("/profiles/followers/{userId}")
+    @GetMapping("/follows/profiles/followers/{userId}")
     public ResponseEntity<List<Profile>> followerProfiles(@PathVariable int userId) {
         List<Follow> followers = repo.findFollowers(userId);
         List<Profile> profiles = followers.stream()
@@ -94,7 +94,7 @@ public class FollowController {
     }
 
     // List Profile details of users this user is following
-    @GetMapping("/profiles/following/{userId}")
+    @GetMapping("/follows/profiles/following/{userId}")
     public ResponseEntity<List<Profile>> followingProfiles(@PathVariable int userId) {
         List<Follow> following = repo.findFollowing(userId);
         List<Profile> profiles = following.stream()

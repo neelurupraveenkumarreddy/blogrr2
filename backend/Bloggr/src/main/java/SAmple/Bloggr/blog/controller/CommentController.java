@@ -14,7 +14,7 @@ public class CommentController {
     @Autowired
     private CommentRepository commentRepository;
 
-    @PostMapping("/create")
+    @PostMapping("/secure/create")
     public Map<String, String> createComment(@RequestBody Comment comment) {
         try {
             int result = commentRepository.createComment(comment);
@@ -35,7 +35,7 @@ public class CommentController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/secure/{id}")
     public Map<String, String> updateComment(@PathVariable int id, @RequestBody Comment comment) {
         try {
             comment.setId(id);
@@ -48,7 +48,7 @@ public class CommentController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/secure/{id}")
     public Map<String, String> deleteComment(@PathVariable int id) {
         try {
             int result = commentRepository.deleteComment(id);

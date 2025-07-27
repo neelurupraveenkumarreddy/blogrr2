@@ -15,7 +15,7 @@ public class CategoryController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @PostMapping("/create")
+    @PostMapping("/secure/create")
     public Map<String, String> createCategory(@RequestBody Category category) {
         try {
             int result = categoryRepository.createCategory(category);
@@ -48,7 +48,7 @@ public class CategoryController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/secure/{id}")
     public Map<String, String> updateCategory(@PathVariable int id, @RequestBody Category category) {
         try {
             category.setId(id);
@@ -61,7 +61,7 @@ public class CategoryController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/secure/{id}")
     public Map<String, String> deleteCategory(@PathVariable int id) {
         try {
             int result = categoryRepository.deleteCategory(id);

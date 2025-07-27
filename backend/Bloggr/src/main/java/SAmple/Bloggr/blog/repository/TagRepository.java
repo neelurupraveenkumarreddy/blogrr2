@@ -46,6 +46,15 @@ public class TagRepository {
         String sql = "SELECT * FROM tags";
         return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Tag.class));
     }
+    
+    public List<int[]> getAllPostTags() {
+    String sql = "SELECT post_id, tag_id FROM post_tags";
+    return jdbcTemplate.query(sql, (rs, rowNum) -> new int[]{
+        rs.getInt("post_id"),
+        rs.getInt("tag_id")
+    });
+}
+
 
     public Tag findTagByName(String name) {
         String sql = "SELECT * FROM tags WHERE name = ?";

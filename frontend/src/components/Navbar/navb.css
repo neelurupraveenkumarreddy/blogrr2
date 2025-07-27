@@ -3,9 +3,10 @@
   justify-content: space-between;
   align-items: center;
   padding: 14px 30px;
-  background-color: white;
+  background:#020203;
   border-bottom: 1px solid #e2e2e2;
   position: sticky;
+  color:white;
   top: 0;
   z-index: 100;
 }
@@ -19,18 +20,18 @@
 .navbar-logo {
   font-size: 20px;
   font-weight: bold;
-  color: black;
+  color: #edeae8;
   text-decoration: none;
 }
 
 .navbar-link {
   text-decoration: none;
-  color: #333;
+  color: white;
   font-size: 15px;
 }
 
 .navbar-link:hover {
-  color: #007bff;
+  color: #f69200;
 }
 
 .navbar-right {
@@ -47,7 +48,7 @@
 }
 
 .navbar-button {
-  background-color: #007bff;
+  background-color: #a11008;
   color: white;
   padding: 7px 14px;
   border-radius: 6px;
@@ -56,7 +57,7 @@
 }
 
 .navbar-button:hover {
-  background-color: #0056b3;
+  background-color: #f69200;
 }
 
 .navbar-profile {
@@ -64,8 +65,8 @@
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
-  background-color:black;
-  color:white;
+  background-color:white;
+  color:black;
   text-align:center;
   font-size: 20px;
 }
@@ -75,6 +76,7 @@
   background: none;
   border: none;
   cursor: pointer;
+  color:white;
 }
 
 .navbar-menu {

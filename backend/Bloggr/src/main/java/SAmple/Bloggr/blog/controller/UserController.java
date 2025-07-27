@@ -79,7 +79,7 @@ public ResponseEntity<Map<Integer, String>> getUsernamesMap() {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/secure/{id}")
     public ResponseEntity<Map<String, String>> deleteUser(@PathVariable int id) {
         try {
             int result = userRepository.deleteUser(id);

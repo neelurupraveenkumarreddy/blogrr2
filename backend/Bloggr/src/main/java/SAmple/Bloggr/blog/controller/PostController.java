@@ -14,7 +14,7 @@ public class PostController {
     @Autowired
     private PostRepository postRepository;
 
-    @PostMapping("/create")
+    @PostMapping("/secure/create")
     public Map<String, Object> createPost(@RequestBody Post post) {
     try {
         int postId = postRepository.savePost(post);
@@ -50,7 +50,7 @@ public Object getAllPosts() {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/secure/{id}")
     public Map<String, String> updatePost(@PathVariable int id, @RequestBody Post updatedPost) {
         try {
             updatedPost.setId(id);
@@ -63,8 +63,9 @@ public Object getAllPosts() {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/secure/{id}")
     public Map<String, String> deletePost(@PathVariable int id) {
+        System.out.println(id);
         try {
             int result = postRepository.deletePost(id);
             return (result > 0)

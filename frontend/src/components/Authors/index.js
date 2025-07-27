@@ -11,13 +11,14 @@ class Authors extends Component {
     currentUserId: null,
     loading: true,
     error: null,
+    Jtoken:"",
   };
 
   componentDidMount() {
     const jwtToken=Cookies.get("jwt_token");
     if(jwtToken){
     const user = JSON.parse(localStorage.getItem("user"));
-    this.setState({ currentUserId: user.id }, this.fetchAuthors);
+    this.setState({ currentUserId: user.id,Jtoken:jwtToken }, this.fetchAuthors);
     }else {
       this.setState({ error: "User not logged in", loading: false });
       return;
@@ -58,12 +59,16 @@ class Authors extends Component {
   };
 
   toggleFollow = async (followeeId, isFollowing) => {
-    const { currentUserId } = this.state;
+    const { currentUserId,Jtoken } = this.state;
     const endpoint = isFollowing ? "unfollow" : "follow";
-
+    console.log(Jtoken);
     try {
-      const res = await fetch(`http://localhost:8080/api/follows/${endpoint}?followerId=${currentUserId}&followeeId=${followeeId}`, {
+      const res = await fetch(`/api/secure/follows/${endpoint}?followerId=${currentUserId}&followeeId=${followeeId}`, {
         method: "POST",
+        headers: {
+    Authorization: `Bearer ${Jtoken}`,
+    "Content-Type": "application/json"
+  }
       });
 
       const data = await res.json();

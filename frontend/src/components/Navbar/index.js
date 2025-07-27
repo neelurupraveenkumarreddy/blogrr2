@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Cookies from 'js-cookie';
-import "./navbar.css";
+import "./navb.css";
 
 class Navbar extends Component {
   state = {

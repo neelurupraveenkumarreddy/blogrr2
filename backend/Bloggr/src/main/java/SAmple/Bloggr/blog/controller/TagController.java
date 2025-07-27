@@ -104,4 +104,12 @@ public Map<String, String> deleteTag(@PathVariable int id) {
             return Map.of("error", "Error fetching tags: " + e.getMessage());
         }
     }
+    @GetMapping("/post-tags")
+public Object getAllPostTags() {
+    try {
+        return tagRepository.getAllPostTags();
+    } catch (Exception e) {
+        return Map.of("error", "Error fetching post-tags: " + e.getMessage());
+    }
+}
 }

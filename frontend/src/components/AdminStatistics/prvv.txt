@@ -46,6 +46,7 @@ class AdminStatistics extends Component {
       const categories = await catRes.json();
       const tags = await tagRes.json();
       const postTags = await postTagsRes.json();
+      console.log(postTags)
       // Compute usages
       const categoryUsage = this.countCategoryUsage(posts, categories);
       const tagUsage = this.countTagUsage(postTags, tags);
@@ -96,6 +97,7 @@ class AdminStatistics extends Component {
 
   render() {
     const { users, posts, categoryUsage, tagUsage, loading } = this.state;
+    console.log(tagUsage)
     if (loading) {
       return (
         <div className="admin-statistics-container">

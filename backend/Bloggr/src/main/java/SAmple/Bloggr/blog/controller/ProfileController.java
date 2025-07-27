@@ -16,7 +16,7 @@ public class ProfileController {
     private ProfileRepository repo;
 
     // Create new profile
-    @PostMapping("/create")
+    @PostMapping("/secure/create")
     public ResponseEntity<Map<String, String>> createProfile(@RequestBody Profile p) {
         try {
             int result = repo.create(p);
@@ -51,7 +51,7 @@ public class ProfileController {
     }
 
     // Update profile
-    @PutMapping("/{userId}")
+    @PutMapping("/secure/{userId}")
     public ResponseEntity<Map<String, String>> updateProfile(
             @PathVariable int userId,
             @RequestBody Profile p
@@ -69,7 +69,7 @@ public class ProfileController {
     }
 
     // Delete profile
-    @DeleteMapping("/{userId}")
+    @DeleteMapping("/secure/{userId}")
     public ResponseEntity<Map<String, String>> deleteProfile(@PathVariable int userId) {
         try {
             int result = repo.deleteByUserId(userId);

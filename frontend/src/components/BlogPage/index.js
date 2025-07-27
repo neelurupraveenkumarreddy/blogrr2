@@ -3,6 +3,8 @@ import Cookies from 'js-cookie'
 import Navbar from "../Navbar";
 import { withRouter } from "../../utils/withRouter";
 import "./page.css";
+import ReactMarkdown from "react-markdown";
+
 
 class BlogPage extends Component {
   state = {
@@ -11,6 +13,7 @@ class BlogPage extends Component {
     author: "",
     date: "",
     content: [],
+    Jtoken:"",
     tags: [],
     likes: 0,
     comments: [],
@@ -24,7 +27,7 @@ class BlogPage extends Component {
     const jwtToken = Cookies.get("jwt_token");
     if (jwtToken) {
       const user = JSON.parse(localStorage.getItem("user"));
-      this.setState({ user }, () => {
+      this.setState({ user,Jtoken:jwtToken }, () => {
         this.fetchBlogPost();
       });
     } else {
@@ -161,9 +164,8 @@ class BlogPage extends Component {
   };
 
   handleCommentPost = async () => {
-    const { newComment, user } = this.state;
+    const { newComment, user ,Jtoken} = this.state;
     const { id } = this.props.params;
-
     if (!user) {
       alert("Please log in to comment.");
       return;
@@ -179,9 +181,9 @@ class BlogPage extends Component {
     };
 
     try {
-      const res = await fetch("http://localhost:8080/api/comments/create", {
+      const res = await fetch("http://localhost:8080/api/comments/secure/create", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" ,Authorization: `Bearer ${Jtoken}`},
         body: JSON.stringify(commentData)
       });
       const data = await res.json();
@@ -207,13 +209,11 @@ class BlogPage extends Component {
       likedByUser,
       user
     } = this.state;
-
     return (
-      <>
+      <div className="blog-m">
         <Navbar />
         <div className="blog-container">
           <div className="blog-header">
-            <p className="blog-breadcrumb">Home / {category}</p>
             <h1 className="blog-title">{title}</h1>
 
             <div className="blog-tags">
@@ -228,7 +228,7 @@ class BlogPage extends Component {
 
           <div className="blog-content">
             {content.map((para, index) => (
-              <p key={index} className="blog-paragraph">{para}</p>
+              <ReactMarkdown key={index} >{para}</ReactMarkdown>
             ))}
           </div>
 
@@ -268,7 +268,7 @@ class BlogPage extends Component {
             )}
           </div>
         </div>
-      </>
+      </div>
     );
   }
 }

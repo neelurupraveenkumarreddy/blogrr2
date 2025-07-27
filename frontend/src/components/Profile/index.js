@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 import Navbar from "../Navbar";
 import { withRouter } from "../../utils/withRouter";
 import './profile.css';
@@ -12,6 +13,7 @@ class Profile extends Component {
     error: null,
     followers: 0,
     following: 0,
+    Jtoken:"",
     createForm: {
       displayName: "",
       handle: "",
@@ -23,7 +25,7 @@ class Profile extends Component {
 editPostForm: {
   title: "",
   content: "",
-  image_url: ""
+  image_url: "",
 },
   };
 
@@ -33,20 +35,21 @@ editPostForm: {
 
   loadData = async () => {
     const { userId } = this.props.params;
+    const Jtoken=Cookies.get("jwt_token");
+    this.setState({Jtoken:Jtoken});
     try {
       const profRes = await fetch(`http://localhost:8080/api/profiles/${userId}`);
       if (profRes.ok) {
         const profile = await profRes.json();
         const postsRes = await fetch("http://localhost:8080/api/posts");
         const allPosts = await postsRes.json();
-        const posts = allPosts.filter((p) => p.author_id === parseInt(userId, 10));
+        const posts = allPosts.filter((p) => p.author_id === parseInt(userId));
 
         const folRes = await fetch(`http://localhost:8080/api/follows/count/followers/${userId}`);
         const { followers } = await folRes.json();
 
         const follRes = await fetch(`http://localhost:8080/api/follows/count/following/${userId}`);
         const { following } = await follRes.json();
-
         this.setState({
           profile,
           posts,
@@ -79,12 +82,15 @@ editPostForm: {
 
   handleCreateProfile = async () => {
     const { userId } = this.props.params;
-    const { displayName, handle, avatarUrl, bio } = this.state.createForm;
-
+    const {Jtoken,createForm}=this.state;
+    const { displayName, handle, avatarUrl, bio } = createForm;
     try {
-      const res = await fetch("http://localhost:8080/api/profiles/create", {
+      const res = await fetch("http://localhost:8080/api/profiles/secure/create", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Jtoken}`
+        },
         body: JSON.stringify({
           userId: parseInt(userId, 10),
           displayName,
@@ -109,11 +115,11 @@ editPostForm: {
   handleUpdateProfile = async () => {
     const { userId } = this.props.params;
     const { displayName, handle, avatarUrl, bio } = this.state.createForm;
-
+    const {Jtoken}=this.state
     try {
-      const res = await fetch(`http://localhost:8080/api/profiles/${userId}`, {
+      const res = await fetch(`http://localhost:8080/api/profiles/secure/${userId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" ,Authorization: `Bearer ${Jtoken}`,},
         body: JSON.stringify({
           displayName,
           handle,
@@ -137,12 +143,17 @@ editPostForm: {
 
   handleDeleteProfile = async () => {
     const { userId } = this.props.params;
+    const {Jtoken}=this.state
     const confirm = window.confirm("Are you sure you want to delete your profile?");
     if (!confirm) return;
 
     try {
-      const res = await fetch(`http://localhost:8080/api/profiles/${userId}`, {
-        method: "DELETE"
+      const res = await fetch(`http://localhost:8080/api/profiles/secure/${userId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Jtoken}`,
+        }
       });
 
       if (res.ok) {
@@ -158,12 +169,17 @@ editPostForm: {
   };
 
   handleDeletePost = async (postId) => {
+    const {Jtoken}=this.state
   const confirm = window.confirm("Are you sure you want to delete this post?");
   if (!confirm) return;
 
   try {
-    const res = await fetch(`http://localhost:8080/api/posts/${postId}`, {
-      method: "DELETE"
+    const res = await fetch(`http://localhost:8080/api/posts/secure/${postId}`, {
+      method: "DELETE",
+      headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${Jtoken}`,
+        }
     });
 
     const data = await res.json();
@@ -200,12 +216,12 @@ handleEditPostChange = (e) => {
 };
 
 handleUpdatePost = async () => {
-  const { editPostId, editPostForm } = this.state;
+  const { editPostId, editPostForm,Jtoken } = this.state;
 
   try {
-    const res = await fetch(`http://localhost:8080/api/posts/${editPostId}`, {
+    const res = await fetch(`http://localhost:8080/api/posts/secure/${editPostId}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${Jtoken}`,},
       body: JSON.stringify({
         ...editPostForm,
         category_id: 1, // You can replace this with real category logic

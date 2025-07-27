@@ -8,6 +8,7 @@ class UsersManagement extends Component {
   state = {
     users: [],
     searchTerm: "",
+    Jtoken:"",
   };
 
   componentDidMount() {
@@ -15,6 +16,8 @@ class UsersManagement extends Component {
   }
 
   fetchUsers = async () => {
+    const Jtoken=Cookies.get("jwt_token")
+    this.setState({Jtoken:Jtoken});
     try {
       const response = await fetch("/api/users");
       const data = await response.json();
@@ -26,11 +29,12 @@ class UsersManagement extends Component {
   };
 
   deleteUser = async (id) => {
+    const {Jtoken}=this.state
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
-      const response = await fetch(`/api/users/${id}`, {
+      const response = await fetch(`/api/users/secure/${id}`, {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${Cookies.get("jwt_token")}` },
+        headers: { Authorization: `Bearer ${Jtoken}` },
       });
       if (response.ok) {
         alert("User deleted");
