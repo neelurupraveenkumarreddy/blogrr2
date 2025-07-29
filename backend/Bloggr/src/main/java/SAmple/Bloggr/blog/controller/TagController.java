@@ -2,6 +2,8 @@ package SAmple.Bloggr.blog.controller;
 
 import SAmple.Bloggr.blog.model.Tag;
 import SAmple.Bloggr.blog.repository.TagRepository;
+import SAmple.Bloggr.blog.repository.TagViewRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -112,4 +114,12 @@ public Object getAllPostTags() {
         return Map.of("error", "Error fetching post-tags: " + e.getMessage());
     }
 }
+@Autowired
+private TagViewRepository tagViewRepository;
+
+@GetMapping("/view")
+public List<Map<String, Object>> getTagsWithPostCount() {
+    return tagViewRepository.getTagsWithPostCount();
+}
+
 }

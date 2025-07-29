@@ -60,7 +60,10 @@ public class PostRepository {
     
     // READ BY ID
     public Post getPostById(int id) {
-        String sql = "SELECT * FROM posts WHERE id = ?";
+        String sql = "SELECT p.*, c.name AS categoryName " +
+                 "FROM posts p " +
+                 "JOIN categories c ON p.category_id = c.id " +
+                 "WHERE p.id = ?";
         List<Post> posts = jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Post.class), id);
         return posts.isEmpty() ? null : posts.get(0);
     }

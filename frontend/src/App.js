@@ -15,6 +15,7 @@ import UsersManagement from "./components/UsersManagement";
 import ProfilesManagement from "./components/ProfilesManagement";
 import PostsManagement from "./components/PostsManagement";
 import AdminCatTag from "./components/AdminCatTag";
+import AdminMessages from "./components/AdminMessages";
 function App() {
   return (
     <Router>
@@ -23,16 +24,16 @@ function App() {
         <Route path="/" element={<Home/>} />
         <Route exact path="/register" element={<Register/>}/>
         <Route exact path="/blogpage/:id" element={<BlogPage/>}/>
-        <Route exact path="/upload" element={<Upload/>} />
-        <Route exact path="/profile/:userId" element={<Profile/>} />
+        <Route exact path="/upload" element={<ProtectedRoute><Upload/></ProtectedRoute>} />
+        <Route exact path="/profile/:userId" element={<ProtectedRoute><Profile/></ProtectedRoute>} />
         <Route exact path="/authors" element={<Authors/>} />
         <Route exact path="/contact" element={<Contact/>} />
-        <Route exact path="/admin/categories-tags" element={<AdminCatTag/>}/>
-        <Route exact path="/admin/" element={<AdminStatistics/>}/>
-        <Route exact path="/admin/users" element={<UsersManagement/>} />
-        <Route exact path="/admin/profiles" element={<ProfilesManagement/>} />
-        <Route exact path="/admin/posts" element={<PostsManagement/>} />
-
+        <Route exact path="/admin/categories-tags" element={<ProtectedRoute><AdminCatTag/></ProtectedRoute>}/>
+        <Route exact path="/admin/" element={<ProtectedRoute><AdminStatistics/></ProtectedRoute>}/>
+        <Route exact path="/admin/users" element={<ProtectedRoute><UsersManagement/></ProtectedRoute>} />
+        <Route exact path="/admin/profiles" element={<ProtectedRoute><ProfilesManagement/></ProtectedRoute>} />
+        <Route exact path="/admin/posts" element={<ProtectedRoute><PostsManagement/></ProtectedRoute>} />
+        <Route exact path="/admin/messages" element={<ProtectedRoute><AdminMessages/></ProtectedRoute>} />
       </Routes>
     </Router>
   );

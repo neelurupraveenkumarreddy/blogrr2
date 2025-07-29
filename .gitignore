@@ -1,7 +1,8 @@
 
 .env
-backend\Bloggr\src\main\resources\application.properties
-
+# Ignore application properties
+backend/Bloggr/src/main/resources/application.properties
+/src/main/resources/application.yml
 /build/
 /target/
 /out/

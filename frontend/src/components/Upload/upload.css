@@ -1,354 +1,433 @@
-.upload-container {
-  max-width: 700px;
-  margin: 40px auto;
-  padding: 20px;
-  font-family: sans-serif;
-  display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+:root {
+  --primary-color: #a11008;
+  --secondary-color: #f69200;
+  --dark-color: #020203;
+  --light-color: #edeae8;
+  --white: #ffffff;
+  --gray: #6c757d;
+  --light-gray: #f8f9fa;
+  --border-radius: 8px;
+  --transition: all 0.3s ease;
 }
 
-.upload-title {
-  font-size: 24px;
-  margin-bottom: 20px;
+.upload-page {
+  background-color: var(--light-color);
+  min-height: 100vh;
+  padding: 20px 0;
+}
+
+.upload-container {
+  display: flex;
+  max-width: 90%;
+  margin: 0 auto;
+  gap: 30px;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.upload-form-container {
+  flex: 1;
+  padding: 30px;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.upload-header {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--dark-color);
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.upload-header::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  width: 60px;
+  height: 4px;
+  background-color: var(--secondary-color);
+  border-radius: 2px;
 }
 
 .upload-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 25px;
 }
 
-.upload-input,
-.upload-textarea {
-  width: 100%;
-  padding: 12px;
-  font-size: 16px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.upload-textarea {
-  min-height: 120px;
-  resize: vertical;
+.form-label {
+  font-weight: 500;
+  color: var(--dark-color);
+  font-size: 0.95rem;
 }
 
-.upload-dropbox {
-  border: 2px dashed #ccc;
-  padding: 30px;
-  text-align: center;
-  border-radius: 10px;
+.form-input {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 0.95rem;
+  transition: var(--transition);
 }
 
-.upload-label {
-  font-weight: bold;
-  margin-bottom: 4px;
+.form-input:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px rgba(246, 146, 0, 0.1);
 }
 
-.upload-sub {
-  color: #888;
-  font-size: 14px;
-  margin-bottom: 10px;
+.tags-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.upload-file-input {
-  margin-top: 10px;
-}
-
-.upload-button {
-  background-color: #007bff;
-  color: white;
-  padding: 12px;
-  font-size: 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.upload-tag-container {
-  margin: 15px 0;
-}
-
-.tag-input-wrapper {
+.tags-display {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   gap: 8px;
-  border: 1px solid #ccc;
-  padding: 8px;
-  border-radius: 6px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  min-height: 46px;
 }
 
-.upload-tag-input {
+.tags-input {
   border: none;
   outline: none;
+  font-size: 0.95rem;
   min-width: 150px;
-  font-size: 14px;
+  flex: 1;
 }
 
 .tag-pill {
-  background-color: #e0e0e0;
-  padding: 5px 10px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: 5px 12px;
   border-radius: 20px;
+  font-size: 0.85rem;
   display: inline-flex;
   align-items: center;
-  font-size: 14px;
+  gap: 5px;
+  transition: var(--transition);
 }
 
 .tag-remove {
   background: none;
   border: none;
-  font-size: 16px;
-  margin-left: 6px;
+  color: var(--white);
   cursor: pointer;
-}
-
-.upload-left, .upload-right {
-  flex: 1;
-}
-
-.upload-right {
+  font-size: 1rem;
+  padding: 0;
   display: flex;
-  flex-direction: column;
-  border-left: 1px solid #ddd;
-  padding-left: 20px;
-}
-
-.markdown-toolbar {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.markdown-toolbar button {
-  padding: 6px 10px;
-  border: 1px solid #ccc;
-  background: #f9f9f9;
-  cursor: pointer;
-  border-radius: 4px;
-}
-
-.markdown-editor {
-  width: 100%;
-  height: 200px;
-  padding: 10px;
-}
-
-.markdown-preview {
-  margin-top: 10px;
-  border: 1px solid #ccc;
-  padding: 10px;
-  background: #fff;
-  height: 200px;
-  overflow-y: auto;
-}
-
-/* Container for entire upload page */
-.upload-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 30px;
-  max-width: 1200px;
-  margin: 30px auto;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-/* Left panel (blog details) */
-.upload-left {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-/* Right panel (markdown editor) */
-.upload-right {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border-left: 1px solid #ddd;
-  padding-left: 20px;
-}
-
-/* Title */
-.upload-title {
-  font-size: 1.8rem;
-  font-weight: 600;
-  margin-bottom: 10px;
-}
-
-/* Input fields */
-.upload-input,
-.upload-tag-input,
-.markdown-editor {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 14px;
-  outline: none;
-  transition: border-color 0.2s ease-in-out;
-}
-
-.upload-input:focus,
-.upload-tag-input:focus,
-.markdown-editor:focus {
-  border-color: #007bff;
-}
-
-/* Markdown editor textarea */
-.markdown-editor {
-  height: 200px;
-  font-family: monospace;
-  resize: vertical;
-}
-
-/* Markdown toolbar buttons */
-.markdown-toolbar {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 5px;
-}
-
-.markdown-toolbar button {
-  padding: 5px 10px;
-  border: 1px solid #ccc;
-  background: #f9f9f9;
-  cursor: pointer;
-  border-radius: 4px;
-  font-size: 14px;
-  transition: background 0.2s;
-}
-
-.markdown-toolbar button:hover {
-  background: #e0e0e0;
-}
-
-/* Markdown preview box */
-.markdown-preview {
-  border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 6px;
-  background: #fff;
-  height: 200px;
-  overflow-y: auto;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-/* Tag pills */
-.tag-input-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  border: 1px solid #ccc;
-  padding: 5px;
-  border-radius: 6px;
-}
-
-.tag-pill {
-  display: inline-flex;
   align-items: center;
-  padding: 4px 8px;
-  background: #e0e0e0;
-  border-radius: 15px;
-  font-size: 13px;
-}
-
-.tag-remove {
-  margin-left: 5px;
-  background: transparent;
-  border: none;
-  font-size: 14px;
-  cursor: pointer;
-}
-
-/* Upload featured image section */
-.upload-dropbox {
-  border: 1px dashed #ccc;
-  padding: 15px;
-  text-align: center;
-  border-radius: 6px;
-  background: #fdfdfd;
-}
-
-.upload-dropbox img {
-  margin-top: 10px;
-  width: 100%;
-  max-height: 200px;
-  object-fit: cover;
-  border-radius: 8px;
-}
-
-/* Upload button */
-.upload-button {
-  background-color: #007bff;
-  color: white;
-  padding: 10px;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background 0.2s ease-in-out;
-}
-
-.upload-button:hover {
-  background-color: #0056b3;
 }
 
 .available-tags {
-  margin-top: 10px;
+  margin-top: 5px;
+}
+
+.available-tags-label {
+  font-size: 0.85rem;
+  color: var(--gray);
+  margin-bottom: 5px;
+}
+
+.tags-list {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
 }
 
 .available-tag {
-  background-color: #f1f1f1;
-  padding: 5px 10px;
-  border-radius: 15px;
+  background-color: var(--light-gray);
+  color: var(--dark-color);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
   cursor: pointer;
-  font-size: 14px;
-  transition: background 0.2s;
+  transition: var(--transition);
 }
 
 .available-tag:hover {
-  background-color: #ddd;
+  background-color: #e0e0e0;
 }
 
 .available-tag.disabled {
-  background-color: #ccc;
+  background-color: #e0e0e0;
+  color: var(--gray);
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.7;
+}
+
+.image-upload-container {
+  margin-top: 5px;
+}
+
+.image-upload-label {
+  cursor: pointer;
+}
+
+.image-upload-input {
+  display: none;
+}
+
+.image-upload-box {
+  border: 2px dashed #ddd;
+  border-radius: var(--border-radius);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
+  min-height: 150px;
+}
+
+.image-upload-box:hover {
+  border-color: var(--secondary-color);
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: var(--gray);
+}
+
+.upload-placeholder i {
+  font-size: 2rem;
+  color: var(--secondary-color);
+}
+
+.image-preview {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: var(--border-radius);
+}
+
+.submit-button {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  padding: 12px 20px;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: var(--transition);
+  margin-top: 10px;
+}
+
+.submit-button:hover {
+  background-color: #8a0d06;
+  transform: translateY(-2px);
+}
+
+.submit-button i {
+  font-size: 1rem;
+}
+
+/* Markdown Editor Styles */
+.markdown-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 30px;
+}
+
+.markdown-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.markdown-toolbar button {
+  background-color: var(--light-gray);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.9rem;
+  transition: var(--transition);
+}
+
+.markdown-toolbar button:hover {
+  background-color: #e0e0e0;
+}
+
+.markdown-toolbar button i {
+  font-size: 0.9rem;
+}
+
+.markdown-editor {
+  width: 90%;
+  min-height: 250px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-family: 'Courier New', monospace;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  resize: vertical;
+  margin-bottom: 20px;
+  transition: var(--transition);
+}
+
+.markdown-editor:focus {
+  outline: none;
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px rgba(246, 146, 0, 0.1);
+}
+
+.preview-header {
+  margin-bottom: 15px;
+}
+
+.preview-header h3 {
+  font-size: 1.2rem;
+  color: var(--dark-color);
+}
+
+.markdown-preview {
+  flex: 1;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  overflow-y: auto;
+  background-color: var(--white);
+  line-height: 1.6;
+}
+
+.preview-placeholder {
+  color: var(--gray);
+  font-style: italic;
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Markdown Preview Styles */
+.markdown-preview h1,
+.markdown-preview h2,
+.markdown-preview h3,
+.markdown-preview h4,
+.markdown-preview h5,
+.markdown-preview h6 {
+  margin: 1.5rem 0 1rem;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.markdown-preview p {
+  margin-bottom: 1rem;
+}
+
+.markdown-preview a {
+  color: var(--secondary-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.markdown-preview a:hover {
+  text-decoration: underline;
+}
+
+.markdown-preview ul,
+.markdown-preview ol {
+  margin-bottom: 1rem;
+  padding-left: 1.5rem;
+}
+
+.markdown-preview blockquote {
+  border-left: 4px solid var(--secondary-color);
+  padding-left: 1rem;
+  margin: 1rem 0;
+  color: var(--gray);
+  font-style: italic;
+}
+
+.markdown-preview code {
+  background-color: var(--light-gray);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.markdown-preview pre {
+  background-color: var(--light-gray);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.markdown-preview img {
+  max-width: 100%;
+  border-radius: var(--border-radius);
 }
 
 /* Responsive Design */
-@media (max-width: 900px) {
+@media (max-width: 992px) {
   .upload-container {
     flex-direction: column;
+    max-width: 800px;
   }
 
-  .upload-right {
-    border-left: none;
-    padding-left: 0;
-    margin-top: 20px;
+  .upload-form-container {
+    border-right: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   }
 }
-.markdown-editor {
-  width: 100%;
-  min-height: 200px;
-  max-height: 500px;
-  font-family: monospace;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  resize: vertical; /* Allows resizing */
-  overflow: auto;
-  white-space: pre-wrap; /* Keeps formatting intact */
+
+@media (max-width: 768px) {
+  .upload-container {
+    margin: 0 20px;
+  }
+
+  .upload-form-container,
+  .markdown-container {
+    padding: 20px;
+  }
 }
 
+@media (max-width: 576px) {
+  .upload-header {
+    font-size: 1.5rem;
+  }
+
+  .form-input,
+  .tags-input,
+  .markdown-editor {
+    font-size: 0.9rem;
+  }
+
+  .markdown-toolbar {
+    gap: 5px;
+  }
+
+  .markdown-toolbar button {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+}

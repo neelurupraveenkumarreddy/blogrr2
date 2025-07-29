@@ -13,6 +13,7 @@ class Home extends Component {
     selectedTagId: "all",
     categories: [],
     tags: [],
+    fetchState:"inpro",
   };
 
   componentDidMount() {
@@ -35,8 +36,10 @@ class Home extends Component {
       this.setState({
         latestPosts: sortedPosts,
         featuredPosts: sortedPosts.slice(0, 3),
+        fetchState:"suc"
       });
     } catch (error) {
+      this.setState({fetchState:"fail"})
       console.error("Failed to fetch posts:", error);
     }
   };
@@ -74,8 +77,28 @@ class Home extends Component {
   handleTagChange = (e) => {
     this.setState({ selectedTagId: e.target.value });
   };
-
-  render() {
+fetchStateAction=()=>{
+    const {fetchState}=this.state
+    switch (fetchState){
+      case "inpro":
+        return this.loadingScreen()
+      case "fail":
+        return this.failureScreen()
+      case "suc":
+        return this.successScreen()
+      default:
+        return <></>;
+    }
+  }
+  loadingScreen=()=>(
+    <div className="admin-loading">
+            <div className="loading-spinner"></div>
+            <p>Loading Blogs...</p>
+          </div>)
+  failureScreen=()=>(
+    <><h1>Unable to fetch the blog...Please Try again later...</h1>
+  </>)
+  successScreen=()=>{
     const {
       featuredPosts,
       latestPosts,
@@ -102,66 +125,97 @@ class Home extends Component {
 
       return matchesSearch && matchesCategory && matchesTag;
     });
-
-    return (
-      <>
-        <Navbar />
-        <div className="home-container">
-          {/* Search Bar */}
-          <div className="home-search-bar">
-            <input
-              className="home-search-input"
-              type="text"
-              placeholder="Search posts"
-              value={searchTerm}
-              onChange={this.handleSearchChange}
-            />
+    return (<div className="home-container">
+          {/* Hero Section */}
+          <div className="home-hero">
+            <h1 className="hero-title">Discover Amazing Content</h1>
+            <p className="hero-subtitle">Explore our collection of featured articles and latest posts</p>
+            
+            {/* Search Bar */}
+            <div className="home-search-bar">
+              <input
+                className="home-search-input"
+                type="text"
+                placeholder="Search posts..."
+                value={searchTerm}
+                onChange={this.handleSearchChange}
+              />
+              <button className="search-button">
+                <i className="fas fa-search"></i>
+              </button>
+            </div>
           </div>
 
           {/* Filters */}
           <div className="home-filters">
-            <select
-              value={selectedCategoryId}
-              onChange={this.handleCategoryChange}
-            >
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
+            <div className="filter-group">
+              <label htmlFor="category-filter">Category</label>
+              <select
+                id="category-filter"
+                value={selectedCategoryId}
+                onChange={this.handleCategoryChange}
+              >
+                {categories.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-            <select value={selectedTagId} onChange={this.handleTagChange}>
-              {tags.map((tag) => (
-                <option key={tag.id} value={tag.id}>
-                  {tag.name}
-                </option>
-              ))}
-            </select>
+            <div className="filter-group">
+              <label htmlFor="tag-filter">Tags</label>
+              <select 
+                id="tag-filter"
+                value={selectedTagId} 
+                onChange={this.handleTagChange}
+              >
+                {tags.map((tag) => (
+                  <option key={tag.id} value={tag.id}>
+                    {tag.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* Featured */}
-          <h2 className="home-section-title">Featured Posts</h2>
+          <div className="section-header">
+            <h2 className="home-section-title">Featured Posts</h2>
+            <div className="section-divider"></div>
+          </div>
           <div className="home-featured-posts">
             {featuredPosts.map((post) => (
               <div className="featured-card" key={post.id}>
-                <img
-                  src={post.image_url}
-                  alt="cover"
-                  className="featured-image"
-                />
-                <h3 className="homePostTitle">{post.title}</h3>
-                <p className="homePostContent">
-                  {post.content.length > 100
-                    ? post.content.substring(0, 100) + "..."
-                    : post.content}
-                </p>
+                <div className="featured-image-container">
+                  <img
+                    src={post.image_url}
+                    alt="cover"
+                    className="featured-image"
+                  />
+                  <div className="featured-overlay"></div>
+                </div>
+                <div className="featured-content">
+                  <span className="post-category">{post.category}</span>
+                  <h3 className="homePostTitle">{post.title}</h3>
+                  <p className="homePostContent">
+                    {post.content.length > 100
+                      ? post.content.substring(0, 100) + "..."
+                      : post.content}
+                  </p>
+                  <button className="read-button">
+                    <Link to={`/blogpage/${post.id}`}>Read More →</Link>
+                  </button>
+                </div>
               </div>
             ))}
           </div>
 
           {/* Latest */}
-          <h2 className="home-section-title">Latest Posts</h2>
+          <div className="section-header">
+            <h2 className="home-section-title">Latest Posts</h2>
+            <div className="section-divider"></div>
+          </div>
           <div className="home-latest-posts">
             {filteredPosts.map((post) => (
               <div className="latest-post" key={post.id}>
@@ -174,7 +228,6 @@ class Home extends Component {
                       : post.content}
                   </p>
 
-                  {/* TAG BADGES */}
                   {Array.isArray(post.tags) && post.tags.length > 0 && (
                     <div className="post-tags">
                       {post.tags.map((t) => (
@@ -186,18 +239,26 @@ class Home extends Component {
                   )}
 
                   <button className="read-button">
-                    <Link to={`/blogpage/${post.id}`}>Read More</Link>
+                    <Link to={`/blogpage/${post.id}`}>Continue Reading →</Link>
                   </button>
                 </div>
-                <img
-                  src={post.image_url}
-                  alt="cover"
-                  className="latest-post-img"
-                />
+                <div className="latest-image-container">
+                  <img
+                    src={post.image_url}
+                    alt="cover"
+                    className="latest-post-img"
+                  />
+                </div>
               </div>
             ))}
           </div>
-        </div>
+        </div>)
+  }
+  render() {
+   return (
+      <>
+        <Navbar />
+        {this.fetchStateAction()}
       </>
     );
   }

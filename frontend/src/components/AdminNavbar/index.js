@@ -11,12 +11,12 @@ class AdminNavbar extends Component {
   };
 
   componentDidMount() {
-      const jwtToken = Cookies.get("jwt_token");
-  if (!jwtToken) {
-    window.location.href = "/login"; // 🔒 redirect if not authenticated
-    return;
-  }
-  this.getLoginDetails();
+    const jwtToken = Cookies.get("jwt_token");
+    if (!jwtToken) {
+      window.location.href = "/login";
+      return;
+    }
+    this.getLoginDetails();
   }
 
   getLoginDetails = () => {
@@ -45,29 +45,70 @@ class AdminNavbar extends Component {
     const token = Cookies.get("jwt_token");
 
     return (
-      <nav className="navbar">
-        <div className="navbar-left">
-          <Link to="/admin/" className="navbar-logo">Bloggr Admin</Link>
-          <button className="navbar-toggle" onClick={this.toggleMenu}>
-            ☰
-          </button>
-        </div>
+      <nav className="admin-navbar">
+        <div className="admin-navbar-container">
+          <div className="admin-navbar-left">
+            <Link to="/admin/" className="admin-navbar-logo">
+              <span className="logo-text">Bloggr</span>
+              <span className="logo-dot">.</span>
+              <span className="logo-admin">Admin</span>
+            </Link>
+            <button 
+              className={`admin-navbar-toggle ${menuOpen ? "open" : ""}`}
+              onClick={this.toggleMenu}
+              aria-label="Toggle menu"
+            >
+              <span className="toggle-line"></span>
+              <span className="toggle-line"></span>
+              <span className="toggle-line"></span>
+            </button>
+          </div>
 
-        <div className={`navbar-menu ${menuOpen ? "open" : ""}`}>
-          <Link to="/admin/" className="navbar-link">Statistics</Link>
-          <Link to="/admin/users" className="navbar-link">Users</Link>
-          <Link to="/admin/profiles" className="navbar-link">Profiles</Link>
-          <Link to="/admin/posts" className="navbar-link">Posts</Link>
-          <Link to="/admin/categories-tags" className="navbar-link">Categories & Tags</Link>
+          <div className={`admin-navbar-menu ${menuOpen ? "open" : ""}`}>
+            <div className="admin-nav-links">
+              <Link to="/admin/" className="admin-navbar-link">
+                <i className="fas fa-chart-bar"></i> Statistics
+              </Link>
+              <Link to="/admin/users" className="admin-navbar-link">
+                <i className="fas fa-users"></i> Users
+              </Link>
+              <Link to="/admin/profiles" className="admin-navbar-link">
+                <i className="fas fa-id-card"></i> Profiles
+              </Link>
+              <Link to="/admin/posts" className="admin-navbar-link">
+                <i className="fas fa-newspaper"></i> Posts
+              </Link>
+              <Link to="/admin/categories-tags" className="admin-navbar-link">
+                <i className="fas fa-tags"></i> Categories & Tags
+              </Link>
+              <Link to="/admin/messages" className="admin-navbar-link">
+                <i className="fas fa-tags"></i> Messages
+              </Link>
+            </div>
 
-          {token ? (
-            <>
-                <div className="navbar-profile">{user ? user[0] : "?"}</div>
-              <button className="navbar-button" onClick={this.logout}>Log out</button>
-            </>
-          ) : (
-            <button className="navbar-button" onClick={() => window.location.href = "/login"}>Login</button>
-          )}
+            <div className="admin-nav-actions">
+              {token ? (
+                <>
+                  <Link to={`/profile/${id}`} className="admin-navbar-profile">
+                    <span className="profile-initial">{user ? user[0] : "?"}</span>
+                  </Link>
+                  <button 
+                    className="admin-navbar-button secondary" 
+                    onClick={this.logout}
+                  >
+                    <i className="fas fa-sign-out-alt"></i> Logout
+                  </button>
+                </>
+              ) : (
+                <button 
+                  className="admin-navbar-button primary"
+                  onClick={() => window.location.href = "/login"}
+                >
+                  <i className="fas fa-sign-in-alt"></i> Login
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </nav>
     );

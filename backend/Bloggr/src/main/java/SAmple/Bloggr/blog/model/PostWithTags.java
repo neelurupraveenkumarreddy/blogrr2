@@ -13,6 +13,15 @@ public class PostWithTags {
     private Timestamp created_at;
     private Timestamp updated_at;
     private List<Tag> tags;
+    private String authorName;
+    private String categoryName;
+
+    // Getters and Setters
+    public String getAuthorName() { return authorName; }
+    public void setAuthorName(String authorName) { this.authorName = authorName; }
+
+    public String getCategoryName() { return categoryName; }
+    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
 
     // Getters and Setters
     public int getId() {

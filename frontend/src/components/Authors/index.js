@@ -29,8 +29,8 @@ class Authors extends Component {
     const { currentUserId } = this.state;
     try {
       const [allRes, followingRes] = await Promise.all([
-        fetch("http://localhost:8080/api/profiles"),
-        fetch(`http://localhost:8080/api/follows/list/following/${currentUserId}`),
+        fetch("/api/profiles"),
+        fetch(`/api/follows/list/following/${currentUserId}`),
       ]);
 
       if (!allRes.ok || !followingRes.ok) throw new Error("Failed to fetch authors");
@@ -61,7 +61,6 @@ class Authors extends Component {
   toggleFollow = async (followeeId, isFollowing) => {
     const { currentUserId,Jtoken } = this.state;
     const endpoint = isFollowing ? "unfollow" : "follow";
-    console.log(Jtoken);
     try {
       const res = await fetch(`/api/secure/follows/${endpoint}?followerId=${currentUserId}&followeeId=${followeeId}`, {
         method: "POST",
@@ -89,10 +88,24 @@ class Authors extends Component {
       <>
         <Navbar />
         <div className="authors-page">
-          <h2>Authors</h2>
+          <div className="authors-header">
+            <h2 className="authors-title">Discover Authors</h2>
+            <p className="authors-subtitle">Find and follow your favorite content creators</p>
+          </div>
 
-          {loading && <p className="authors-loading">Loading authors...</p>}
-          {error && <p className="authors-error">{error}</p>}
+          {loading && (
+            <div className="authors-loading">
+              <div className="loading-spinner"></div>
+              <p>Loading authors...</p>
+            </div>
+          )}
+          
+          {error && (
+            <div className="authors-error">
+              <i className="fas fa-exclamation-circle"></i>
+              <p>{error}</p>
+            </div>
+          )}
 
           <div className="authors-list">
             {authors.map((author) => {
@@ -100,18 +113,21 @@ class Authors extends Component {
               return (
                 <div key={author.userId} className="author-card">
                   <Link to={`/profile/${author.userId}`} className="author-info">
-                    <div className="author-profile">{author.displayName[0]}</div>
-                    <div>
-                      <h4>{author.displayName}</h4>
-                      <p className="username">@{author.handle}</p>
-                      <p className="bio">{author.bio}</p>
+                    <div className="author-avatar">
+                      <span className="avatar-initial">{author.displayName[0]}</span>
+                    </div>
+                    <div className="author-details">
+                      <h4 className="author-name">{author.displayName}</h4>
+                      <p className="author-handle">@{author.handle}</p>
+                      {author.bio && <p className="author-bio">{author.bio}</p>}
                     </div>
                   </Link>
                   <button
                     className={`follow-button ${isFollowing ? "unfollow" : "follow"}`}
                     onClick={() => this.toggleFollow(author.userId, isFollowing)}
                   >
-                    {isFollowing ? "Unfollow" : "Follow"}
+                    <i className={`fas fa-${isFollowing ? "user-minus" : "user-plus"}`}></i>
+                    {isFollowing ? "Following" : "Follow"}
                   </button>
                 </div>
               );

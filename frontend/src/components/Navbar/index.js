@@ -1,4 +1,3 @@
-// src/components/Navbar.js
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Cookies from 'js-cookie';
@@ -28,7 +27,7 @@ class Navbar extends Component {
 
   logout = () => {
     Cookies.remove("jwt_token");
-    alert(`logging out`);
+    alert(`Logging out`);
     window.location.href = "/login";
   };
 
@@ -46,29 +45,51 @@ class Navbar extends Component {
 
     return (
       <nav className="navbar">
-        <div className="navbar-left">
-          <Link to="/" className="navbar-logo">Bloggr</Link>
-          <button className="navbar-toggle" onClick={this.toggleMenu}>
-            ☰
+        <div className="navbar-container">
+          <div className="navbar-left">
+            <Link to="/" className="navbar-logo">
+              <span className="logo-text">Bloggr</span>
+              <span className="logo-dot">.</span>
+            </Link>
+          </div>
+
+          <button 
+            className={`navbar-toggle ${menuOpen ? "open" : ""}`} 
+            onClick={this.toggleMenu}
+            aria-label="Toggle menu"
+          >
+            <span className="toggle-line"></span>
+            <span className="toggle-line"></span>
+            <span className="toggle-line"></span>
           </button>
-        </div>
 
-        <div className={`navbar-menu ${menuOpen ? "open" : ""}`}>
-          <Link to="/" className="navbar-link">Home</Link>
-          <Link to="/authors" className="navbar-link">Authors</Link>
-          <Link to="/contact" className="navbar-link">Contact</Link>
+          <div className={`navbar-menu ${menuOpen ? "open" : ""}`}>
+            <div className="nav-links">
+              <Link to="/" className="navbar-link">Home</Link>
+              <Link to="/authors" className="navbar-link">Authors</Link>
+              <Link to="/contact" className="navbar-link">Contact</Link>
+            </div>
 
-          {token ? (
-            <>
-              <Link to="/upload" className="navbar-button">New Post</Link>
-              <Link to={`/profile/${id}`}>
-                <div className="navbar-profile">{user[0]}</div>
-              </Link>
-              <button className="navbar-button" onClick={this.logout}>Log out</button>
-            </>
-          ) : (
-            <button className="navbar-button" onClick={this.login}>Login</button>
-          )}
+            <div className="nav-actions">
+              {token ? (
+                <>
+                  <Link to="/upload" className="navbar-button primary">
+                    <i className="fas fa-plus"></i> New Post
+                  </Link>
+                  <Link to={`/profile/${id}`} className="navbar-profile">
+                    <span className="profile-initial">{user[0]}</span>
+                  </Link>
+                  <button className="navbar-button secondary" onClick={this.logout}>
+                    <i className="fas fa-sign-out-alt"></i> Logout
+                  </button>
+                </>
+              ) : (
+                <button className="navbar-button primary" onClick={this.login}>
+                  <i className="fas fa-sign-in-alt"></i> Login
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </nav>
     );

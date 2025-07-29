@@ -11,6 +11,15 @@ public class Post {
     private String image_url; // ✅ New field
     private Timestamp created_at;
     private Timestamp updated_at;
+    private String categoryName;
+
+public String getCategoryName() {
+    return categoryName;
+}
+
+public void setCategoryName(String categoryName) {
+    this.categoryName = categoryName;
+}
 
     // Getters and setters
     public int getId() { return id; }

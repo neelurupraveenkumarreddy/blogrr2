@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -50,13 +51,22 @@ public class ProfileController {
         return ResponseEntity.ok(p);
     }
 
-    // Update profile
+    // Update profile (user can update only their own OR admin can update any)
     @PutMapping("/secure/{userId}")
     public ResponseEntity<Map<String, String>> updateProfile(
             @PathVariable int userId,
-            @RequestBody Profile p
+            @RequestBody Profile p,
+            HttpServletRequest request
     ) {
         try {
+            int requesterId = (int) request.getAttribute("userId");
+            String role = (String) request.getAttribute("role");
+
+            // Check permissions
+            if (!"ADMIN".equals(role) && requesterId != userId) {
+                return ResponseEntity.status(403).body(Map.of("error", "You can only update your own profile"));
+            }
+
             p.setUserId(userId);
             int result = repo.update(p);
             if (result > 0) {
@@ -68,10 +78,21 @@ public class ProfileController {
         }
     }
 
-    // Delete profile
+    // Delete profile (user can delete only their own OR admin can delete any)
     @DeleteMapping("/secure/{userId}")
-    public ResponseEntity<Map<String, String>> deleteProfile(@PathVariable int userId) {
+    public ResponseEntity<Map<String, String>> deleteProfile(
+            @PathVariable int userId,
+            HttpServletRequest request
+    ) {
         try {
+            int requesterId = (int) request.getAttribute("userId");
+            String role = (String) request.getAttribute("role");
+
+            // Check permissions
+            if (!"ADMIN".equals(role) && requesterId != userId) {
+                return ResponseEntity.status(403).body(Map.of("error", "You can only delete your own profile"));
+            }
+
             int result = repo.deleteByUserId(userId);
             if (result > 0) {
                 return ResponseEntity.ok(Map.of("message", "Profile deleted successfully"));
