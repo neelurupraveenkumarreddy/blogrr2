@@ -45,19 +45,18 @@ The project provides a simple yet powerful blogging experience with user managem
 Update your application.properties with DB credentials:
 
 i. properties
-spring.datasource.url=jdbc:mysql://localhost:3306/blogrr
-spring.datasource.username=root
-spring.datasource.password=yourpassword
+-spring.datasource.url=jdbc:mysql://localhost:3306/blogrr
+-spring.datasource.username=root
+-spring.datasource.password=yourpassword
 ii. Run the backend:
-mvn spring-boot:run
+-mvn spring-boot:run
 iii. Frontend (React)
-Navigate to the frontend folder:
-bash
-cd frontend
-Install dependencies:
-npm install
+-Navigate to the frontend folder:
+-cd frontend
+-Install dependencies:
+-npm install
 Start the React dev server:
-npm start
+-npm start
 
 
 
