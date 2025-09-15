@@ -44,13 +44,13 @@ The project provides a simple yet powerful blogging experience with user managem
    cd backend
 Update your application.properties with DB credentials:
 
-##properties
+i. properties
 spring.datasource.url=jdbc:mysql://localhost:3306/blogrr
 spring.datasource.username=root
 spring.datasource.password=yourpassword
-###Run the backend:
+ii. Run the backend:
 mvn spring-boot:run
-##Frontend (React)
+iii. Frontend (React)
 Navigate to the frontend folder:
 bash
 cd frontend
